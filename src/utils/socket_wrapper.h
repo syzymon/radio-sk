@@ -1,13 +1,8 @@
-//
-// Created by syzymon on 01.06.2020.
-//
-
 #ifndef RADIO_SK_SRC_UTILS_SOCKET_WRAPPER_H_
 #define RADIO_SK_SRC_UTILS_SOCKET_WRAPPER_H_
 
 #include <netinet/in.h>
 #include <unistd.h>
-#include <netinet/in.h>
 
 #include "exceptions.h"
 

@@ -97,7 +97,7 @@ class ICYReceiver : public AbstractReceiver {
       super(on_audio, on_metadata), client_(addr, port, timeout), tcp_stream(client_.get_stream()),
       addr(addr), port(port), resource(resource), meta(want_metadata) {}
 
-  void stream_content() override {
+  [[noreturn]] void stream_content() override {
     send_req();
     Headers h = parse_headers(tcp_stream);
 
