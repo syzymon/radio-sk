@@ -16,15 +16,15 @@
     auto proxy = proxy::StdoutProxy();
     const auto &[on_audio, on_meta] = proxy.listeners();
 
-    auto recv = icy::ICYReceiver(on_audio, on_meta,
-                                 host, port, resource, want_meta, timeout);
+    auto recv = icy::Receiver(on_audio, on_meta,
+                              host, port, resource, want_meta, timeout);
     recv.stream_content();
   } else {
-    auto proxy = proxy::UDPProxy(*udp_port, multicast_addr, client_timeout);
+    auto proxy = UDPProxy(*udp_port, multicast_addr, client_timeout);
     const auto &[on_audio, on_meta] = proxy.listeners();
 
-    auto recv = icy::ICYReceiver(on_audio, on_meta,
-                                 host, port, resource, want_meta, timeout);
+    auto recv = icy::Receiver(on_audio, on_meta,
+                              host, port, resource, want_meta, timeout);
     recv.stream_content();
   }
 }
