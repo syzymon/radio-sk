@@ -14,6 +14,7 @@ include_directories(src)
 add_executable(radio-proxy
         src/utils/types.h
         src/utils/sik_radio_protocol.h
+        src/utils/udp.h
         src/proxy/clients_handler_socket.h
         src/proxy/clients_pool.h
         src/proxy/audio_sender.h
@@ -22,4 +23,15 @@ add_executable(radio-proxy
         src/proxy/proxy.h src/utils/tcp.h src/utils/receiver.h src/utils/socket_wrapper.h src/utils/icy.h
         src/proxy/main.h
         src/utils/exceptions.h
-        src/proxy.cc )
+        src/proxy.cc src/utils/proxy.h src/utils/addr.h)
+
+add_executable(radio-client
+        src/utils/types.h
+        src/utils/sik_radio_protocol.h
+        src/utils/udp.h
+        src/utils/exceptions.h
+        src/utils/proxy.h
+        src/utils/receiver.h
+        src/client/proxies_handler_socket.h src/client/srp_receiver.h src/client/main.h
+        src/client.cc
+        src/utils/addr.h)
