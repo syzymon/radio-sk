@@ -1,13 +1,11 @@
 #ifndef RADIO_SK_SRC_PROXY_CLIENTS_HANDLER_SOCKET_H_
 #define RADIO_SK_SRC_PROXY_CLIENTS_HANDLER_SOCKET_H_
 
-#include <cstdint>
 #include <string>
+#include <cstdint>
 #include <unistd.h>
 #include <netinet/in.h>
-#include <optional>
 #include <arpa/inet.h>
-#include <iostream>
 
 #include "utils/types.h"
 #include "utils/exceptions.h"
@@ -15,7 +13,6 @@
 static constexpr size_t BUF_SIZE = 65536;
 
 class ClientsHandlerSocket {
- private:
   int sock = -1;
   sockaddr_in local_address{};
   char buffer[BUF_SIZE]{};
@@ -54,7 +51,7 @@ class ClientsHandlerSocket {
   ClientsHandlerSocket(const ClientsHandlerSocket &other) = delete;
 
   explicit ClientsHandlerSocket(
-      std::int16_t server_port,
+      uint16_t server_port,
       const std::optional<std::string> &multi = std::nullopt
   ) {
     if ((sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
@@ -77,7 +74,7 @@ class ClientsHandlerSocket {
       safe_throw();
   }
 
-  types::NetworkMessage get_msg() {
+  [[nodiscard]] types::NetworkMessage get_msg() {
     sockaddr_in client_address{};
     socklen_t rcva_len = sizeof client_address;
     ssize_t len = recvfrom(sock, buffer, sizeof(buffer),
@@ -89,7 +86,7 @@ class ClientsHandlerSocket {
     return {std::string(buffer, buffer + len), {client_address, rcva_len}};
   }
 
-  void send_msg(const types::NetworkMessage &msg) {
+  void send_msg(const types::NetworkMessage &msg) const {
     if (sendto(sock, msg.first.c_str(), msg.first.length(), 0,
                reinterpret_cast<const sockaddr *>(&msg.second.first), msg.second.second) < 0)
       // TODO: refactor exception handling?
