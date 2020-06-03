@@ -59,17 +59,14 @@ class TCPClient : public network::AbstractSocketWrapper {
   }
 
  public:
+  TCPClient() = delete;
+
   TCPClient(const std::string &addr, const std::string &port, types::seconds_t timeout) :
       AbstractSocketWrapper(initialize_socket(addr, port, timeout)),
       buf_(sock, std::ios::in | std::ios::out), sock_stream_(&buf_) {}
 
   std::iostream &get_stream() {
     return sock_stream_;
-  }
-
-  ~TCPClient() override {
-    std::cerr << "CLOSE";
-    if (sock >= 0) close(sock);
   }
 };
 }

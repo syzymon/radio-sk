@@ -2,6 +2,7 @@
 #define RADIO_SK_SRC_UTILS_TYPES_H_
 
 #include <string>
+#include <functional>
 #include <unistd.h>
 #include <netinet/in.h>
 

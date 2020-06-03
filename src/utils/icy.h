@@ -15,7 +15,7 @@ constexpr char COLON = ':';
 using HeaderEntry = std::pair<std::string, std::string>;
 using Headers = std::unordered_map<std::string, std::string>;
 
-class ICYReceiver : public AbstractReceiver {
+class Receiver : public AbstractReceiver {
   using super = AbstractReceiver;
   static constexpr size_t BUF_SIZE = 65536;
   static constexpr size_t CHUNK_SIZE = 8192;
@@ -89,11 +89,11 @@ class ICYReceiver : public AbstractReceiver {
   }
 
  public:
-  ICYReceiver() = delete;
+  Receiver() = delete;
 
-  ICYReceiver(const types::Listener &on_audio, const types::Listener &on_metadata,
-              const std::string &addr, const std::string &port, const std::string &resource,
-              bool want_metadata, types::seconds_t timeout) :
+  Receiver(const types::Listener &on_audio, const types::Listener &on_metadata,
+           const std::string &addr, const std::string &port, const std::string &resource,
+           bool want_metadata, types::seconds_t timeout) :
       super(on_audio, on_metadata), client_(addr, port, timeout), tcp_stream(client_.get_stream()),
       addr(addr), port(port), resource(resource), meta(want_metadata) {}
 
