@@ -1,4 +1,5 @@
-//
-// Created by syzymon on 28.05.2020.
-//
+#include "client/main.h"
 
+int main(int argc, char *argv[]) {
+  client::main();
+}
