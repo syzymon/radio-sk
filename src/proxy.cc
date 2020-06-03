@@ -1,13 +1,11 @@
 #include <boost/program_options.hpp>
-#include <boost/optional.hpp>
-#include <boost/optional/optional_io.hpp>
 
 #include "proxy/main.h"
 
 namespace po = boost::program_options;
 template<typename T>
-std::optional<T> boost_to_std_opt(const boost::optional<T> &opt) {
-  return opt ? std::optional<T>(*opt) : std::nullopt;
+std::optional<T> pseudo_opt_to_std_opt(const T &val, const T &null_val) {
+  return val != null_val ? std::optional<T>(val) : std::nullopt;
 }
 
 /*
@@ -28,8 +26,8 @@ int main(int argc, char *argv[]) {
       (",m", po::value<std::string>()->default_value("no"), "METADATA")
       (",t", po::value<size_t>()->default_value(5), "TIMEOUT")
 
-      (",P", po::value<boost::optional<uint16_t>>()->default_value(boost::none), "UDP PORT")
-      (",B", po::value<boost::optional<std::string>>()->default_value(boost::none), "MULTICAST ADDR")
+      (",P", po::value<size_t>()->default_value(std::numeric_limits<size_t>::max()), "UDP PORT")
+      (",B", po::value<std::string>()->default_value("none"), "MULTICAST ADDR")
       (",T", po::value<size_t>()->default_value(5), "CLIENT TIMEOUT");
 
   po::variables_map var_map;
@@ -48,11 +46,12 @@ int main(int argc, char *argv[]) {
   bool want_meta = var_map["-m"].as<std::string>() == "yes";
   size_t timeout = var_map["-t"].as<size_t>();
 
-  auto udp_port = var_map["-P"].as<boost::optional<uint16_t>>();
-  auto multicast_addr = var_map["-B"].as<boost::optional<std::string>>();
+  auto udp_port = var_map["-P"].as<size_t>();
+  auto multicast_addr = var_map["-B"].as<std::string>();
   size_t client_timeout = var_map["-T"].as<size_t>();
 
   run_proxy(host, resource, port, want_meta, timeout,
-            boost_to_std_opt(udp_port), boost_to_std_opt(multicast_addr),
+            pseudo_opt_to_std_opt(udp_port, std::numeric_limits<size_t>::max()),
+            pseudo_opt_to_std_opt(multicast_addr, std::string("none")),
             client_timeout);
 }
