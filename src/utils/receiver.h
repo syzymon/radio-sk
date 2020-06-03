@@ -4,6 +4,7 @@
 #include <functional>
 #include <utility>
 
+#include "types.h"
 
 class AbstractReceiver {
  protected:
@@ -12,7 +13,7 @@ class AbstractReceiver {
  public:
   AbstractReceiver() = delete;
 
-  AbstractReceiver(const types::Listener& on_audio, const types::Listener& on_metadata) :
+  AbstractReceiver(const types::Listener &on_audio, const types::Listener &on_metadata) :
       on_audio(on_audio), on_metadata(on_metadata) {}
 
   virtual void stream_content() = 0;
