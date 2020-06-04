@@ -5,16 +5,24 @@
 #include <utility>
 
 #include "types.h"
+#include "proxy.h"
 
 class AbstractReceiver {
  protected:
-  const types::Listener &on_audio;
-  const types::Listener &on_metadata;
+  types::Listener on_audio;
+  types::Listener on_metadata;
  public:
   AbstractReceiver() = delete;
 
-  AbstractReceiver(const types::Listener &on_audio, const types::Listener &on_metadata) :
-      on_audio(on_audio), on_metadata(on_metadata) {}
+  AbstractReceiver(types::Listener on_audio, types::Listener on_meta) :
+      on_audio(std::move(on_audio)),
+      on_metadata(std::move(on_meta)) {}
+
+  AbstractReceiver(proxy::RadioProxy &p) {
+    const auto &[aud, met] = p.listeners();
+    on_audio = aud;
+    on_metadata = met;
+  }
 
   virtual void stream_content() = 0;
   virtual ~AbstractReceiver() = default;

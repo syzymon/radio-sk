@@ -9,13 +9,20 @@
 #include <functional>
 #include "types.h"
 
-
 namespace proxy {
 class RadioProxy {
  public:
   virtual void output_audio(const types::buffer_t &audio) = 0;
   virtual void output_meta(const types::buffer_t &meta) = 0;
-  virtual std::pair <types::Listener, types::Listener> listeners() {
+//  virtual types::Listener on_audio() {
+//    return std::bind(&RadioProxy::output_audio, this, std::placeholders::_1);
+//  }
+//
+//  virtual types::Listener on_metadata() {
+//    return std::bind(&RadioProxy::output_meta, this, std::placeholders::_1);
+//  }
+
+  virtual std::pair<types::Listener, types::Listener> listeners() {
     return {std::bind(&RadioProxy::output_audio, this, std::placeholders::_1),
             std::bind(&RadioProxy::output_meta, this, std::placeholders::_1)};
   }
