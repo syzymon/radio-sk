@@ -7,23 +7,11 @@
 #include "utils/addr.h"
 
 namespace client {
-//void main() {
-//  auto sock = ProxiesHandlerSocket();
-//
-//  auto proxy = proxy::StdoutProxy();
-//  const auto &[on_audio, on_meta] = proxy.listeners();
-//
-//  types::addr_t addr = addr::ip_port_to_addr("109.169.23.97", 25089);
-//
-//  auto recv = srp::Receiver(on_audio, on_meta, sock, addr);
-//  recv.stream_content();
-//}
 class Main {
   ProxiesHandlerSocket sock_;
   proxy::StdoutProxy proxy_;
-  types::addr_t proxy_addr_; // TODO: not needed here, only for mock
+  types::addr_t proxy_addr_; // TODO: not needed here, only for mock?
   srp::Receiver recv_;
-
 
  public:
   Main() = delete;

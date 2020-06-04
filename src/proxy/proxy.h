@@ -15,7 +15,6 @@ class UDPProxy : public proxy::RadioProxy {
   ContentSender sender_;
   ProxyServer server_;
   ContentDispatcher dispatcher_;
-  // TODO: RAII
   std::thread proxy_srv_worker_;
 
  public:
@@ -25,9 +24,7 @@ class UDPProxy : public proxy::RadioProxy {
                     const std::optional<std::string> &multi, types::seconds_t secs_timeout)
       : socket_(server_port, multi), pool_(secs_timeout), sender_(socket_, pool_),
         server_(socket_, pool_), dispatcher_(sender_), proxy_srv_worker_(std::ref(server_)) {
-//    std::thread t1(std::ref(server_));
-    // TODO: detach the thread or not?
-//    t1.detach();
+    proxy_srv_worker_.detach();
   }
 
   void output_audio(const types::buffer_t &audio) override {

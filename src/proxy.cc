@@ -1,4 +1,5 @@
 #include <boost/program_options.hpp>
+#include <csignal>
 
 #include "proxy/main.h"
 
@@ -17,6 +18,8 @@ std::optional<T> pseudo_opt_to_std_opt(const T &val, const T &null_val) {
  wysyłane na wszystkie lokalne adresy jednostkowe, adres 255.255.255.255 i adres podany w parametrze -B.
  */
 int main(int argc, char *argv[]) {
+  std::signal(SIGINT, []([[maybe_unused]]int signal) { exit((0)); });
+
   po::options_description desc("parameters");
   desc.add_options()
       (",h", po::value<std::string>()->required(), "RADIO SERVER HOST")
@@ -46,12 +49,12 @@ int main(int argc, char *argv[]) {
   bool want_meta = var_map["-m"].as<std::string>() == "yes";
   size_t timeout = var_map["-t"].as<size_t>();
 
-  auto udp_port = var_map["-P"].as<size_t>();
-  auto multicast_addr = var_map["-B"].as<std::string>();
+  auto udp_port = pseudo_opt_to_std_opt(var_map["-P"].as<size_t>(), std::numeric_limits<size_t>::max());
+  auto multicast_addr = pseudo_opt_to_std_opt(var_map["-B"].as<std::string>(), std::string("none"));
   size_t client_timeout = var_map["-T"].as<size_t>();
 
-  run_proxy(host, resource, port, want_meta, timeout,
-            pseudo_opt_to_std_opt(udp_port, std::numeric_limits<size_t>::max()),
-            pseudo_opt_to_std_opt(multicast_addr, std::string("none")),
-            client_timeout);
+  static auto main =
+      udp_port ? proxy::Main(host, resource, port, want_meta, timeout, *udp_port, multicast_addr, client_timeout)
+               : proxy::Main(host, resource, port, want_meta, timeout);
+  main.main();
 }

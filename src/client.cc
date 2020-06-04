@@ -1,4 +1,6 @@
+#include <csignal>
 #include <boost/program_options.hpp>
+
 #include "client/main.h"
 
 namespace po = boost::program_options;
@@ -15,6 +17,8 @@ namespace po = boost::program_options;
             pośrednik przestał działać, domyślna wartość 5 sekund, opcjonalny.
  */
 int main(int argc, char *argv[]) {
+  std::signal(SIGINT, []([[maybe_unused]]int signal) { exit((0)); });
+
   po::options_description desc("parameters");
   desc.add_options()
       (",H", po::value<std::string>()->required(), "RADIO-PROXY SERVER HOST")

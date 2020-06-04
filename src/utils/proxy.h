@@ -1,7 +1,3 @@
-//
-// Created by syzymon on 03.06.2020.
-//
-
 #ifndef RADIO_SK_SRC_UTILS_PROXY_H_
 #define RADIO_SK_SRC_UTILS_PROXY_H_
 
@@ -14,13 +10,13 @@ class RadioProxy {
  public:
   virtual void output_audio(const types::buffer_t &audio) = 0;
   virtual void output_meta(const types::buffer_t &meta) = 0;
-//  virtual types::Listener on_audio() {
-//    return std::bind(&RadioProxy::output_audio, this, std::placeholders::_1);
-//  }
-//
-//  virtual types::Listener on_metadata() {
-//    return std::bind(&RadioProxy::output_meta, this, std::placeholders::_1);
-//  }
+  virtual types::Listener on_audio() {
+    return std::bind(&RadioProxy::output_audio, this, std::placeholders::_1);
+  }
+
+  virtual types::Listener on_metadata() {
+    return std::bind(&RadioProxy::output_meta, this, std::placeholders::_1);
+  }
 
   virtual std::pair<types::Listener, types::Listener> listeners() {
     return {std::bind(&RadioProxy::output_audio, this, std::placeholders::_1),
