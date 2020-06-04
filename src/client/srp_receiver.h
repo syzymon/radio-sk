@@ -45,9 +45,9 @@ class Receiver : public AbstractReceiver {
   }
 
  public:
-  Receiver(const types::Listener &on_audio, const types::Listener &on_metadata,
+  Receiver(proxy::StdoutProxy &proxy,
            ProxiesHandlerSocket &client, const types::addr_t &proxy_addr) :
-      AbstractReceiver(on_audio, on_metadata), client(client), proxy_addr(proxy_addr) {}
+      AbstractReceiver(proxy), client(client), proxy_addr(proxy_addr) {}
 
   [[noreturn]] void stream_content() override {
     say_hello();
