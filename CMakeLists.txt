@@ -21,6 +21,7 @@ add_executable(radio-proxy
         src/proxy/content_dispatcher.h
         src/proxy/proxy_server.h
         src/proxy/proxy.h src/utils/tcp.h src/utils/receiver.h src/utils/socket_wrapper.h src/utils/icy.h
+        src/utils/address_pool.h
         src/proxy/main.h
         src/utils/exceptions.h
         src/proxy.cc src/utils/proxy.h src/utils/addr.h)
@@ -32,6 +33,7 @@ add_executable(radio-client
         src/utils/exceptions.h
         src/utils/proxy.h
         src/utils/receiver.h
+        src/client/io.h
         src/client/proxies_handler_socket.h src/client/srp_receiver.h src/client/main.h
         src/client.cc
-        src/utils/addr.h)
+        src/utils/addr.h src/client/telnet_controller.h src/client/sender.h src/client/state.h)
