@@ -33,7 +33,7 @@ class Main {
       recv_(proxy_->on_audio(), proxy_->on_metadata(), host, port, resource, want_meta, timeout) {}
 
   [[noreturn]] void main() {
-    recv_.stream_content();
+    recv_();
   }
 };
 }
