@@ -11,6 +11,7 @@
 #include "types.h"
 #include "socket_wrapper.h"
 #include "utils/exceptions.h"
+#include "addr.h"
 
 namespace tcp {
 using __gnu_cxx::stdio_filebuf;
@@ -67,6 +68,52 @@ class TCPClient : public network::AbstractSocketWrapper {
 
   std::iostream &get_stream() {
     return sock_stream_;
+  }
+};
+
+class TCPServer : public network::AbstractSocketWrapper {
+  static constexpr size_t QUEUE_LEN = 5;
+
+  static int initialize_socket(uint16_t port) {
+    std::cerr << "Starting!\n";
+    int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+      throw exceptions::SocketException(errno);
+    }
+
+    const auto[server_address, addr_sz] = addr::ip_port_to_addr(port);
+    if (bind(sock, reinterpret_cast<const sockaddr *>(&server_address), addr_sz) < 0) {
+      close(sock);
+      throw exceptions::SocketException(errno);
+    }
+
+    if (listen(sock, QUEUE_LEN) < 0) {
+      close(sock);
+      throw exceptions::SocketException(errno);
+    }
+
+    if (listen(sock, QUEUE_LEN) < 0) {
+      throw exceptions::SocketException(errno);
+    }
+    std::cerr << "Socket created!\n";
+    return sock;
+  }
+
+ public:
+  TCPServer() = delete;
+
+  explicit TCPServer(uint16_t server_port)
+      : network::AbstractSocketWrapper(initialize_socket(server_port)) {}
+
+  int get_accepted_connection_sock() {
+    sockaddr_in client_address{};
+    socklen_t client_address_len = sizeof(client_address);
+
+    int msg_sock = accept(sock, reinterpret_cast<sockaddr *>(&client_address), &client_address_len);
+    if (msg_sock < 0)
+      safe_throw();
+    std::cerr << "Received connection\n";
+    return msg_sock;
   }
 };
 }
