@@ -74,7 +74,7 @@ class Receiver : public AbstractReceiver {
       response.read(buffer, metaint);
       on_audio(std::string(buffer, buffer + metaint));
       size_t meta_len = response.get() * META_LEN_MULTIPLIER;
-      if(meta_len > 0) {
+      if (meta_len > 0) {
         response.read(buffer, meta_len);
         on_metadata(std::string(buffer, buffer + meta_len));
       }
@@ -97,7 +97,7 @@ class Receiver : public AbstractReceiver {
       super(on_audio, on_metadata), client_(addr, port, timeout), tcp_stream(client_.get_stream()),
       addr(addr), port(port), resource(resource), meta(want_metadata) {}
 
-  [[noreturn]] void stream_content() override {
+  [[noreturn]] void operator()() override {
     send_req();
     Headers h = parse_headers(tcp_stream);
 

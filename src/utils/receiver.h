@@ -18,13 +18,13 @@ class AbstractReceiver {
       on_audio(std::move(on_audio)),
       on_metadata(std::move(on_meta)) {}
 
-  AbstractReceiver(proxy::RadioProxy &p) {
+  explicit AbstractReceiver(proxy::RadioProxy &p) {
     const auto &[aud, met] = p.listeners();
     on_audio = aud;
     on_metadata = met;
   }
 
-  virtual void stream_content() = 0;
+  virtual void operator()() = 0;
   virtual ~AbstractReceiver() = default;
 };
 
