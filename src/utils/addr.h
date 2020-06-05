@@ -5,10 +5,13 @@
 #include "types.h"
 
 namespace addr {
-types::addr_t ip_port_to_addr(const std::string &ip, const uint16_t port) {
-  sockaddr_in sa;
+types::addr_t ip_port_to_addr(const uint16_t port, const std::optional<std::string> &ip=std::nullopt) {
+  sockaddr_in sa{};
   sa.sin_family = AF_INET;
-  inet_pton(AF_INET, ip.c_str(), &(sa.sin_addr));
+  if(ip)
+    inet_pton(AF_INET, ip->c_str(), &(sa.sin_addr));
+  else
+    sa.sin_addr.s_addr = htonl(INADDR_ANY);
   sa.sin_port = htons(port);
   return {sa, sizeof sa};
 }
