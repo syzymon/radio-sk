@@ -28,6 +28,12 @@ class InvalidInputException : public RadioException {
       RadioException(std::move(msg)) {}
 };
 
+class IOException : public RadioException {
+ public:
+  explicit IOException(std::string msg) :
+      RadioException(std::move(msg)) {}
+};
+
 class SocketException : public RadioException {
  public:
   explicit SocketException(int err_num) :
