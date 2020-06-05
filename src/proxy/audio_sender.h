@@ -7,7 +7,7 @@
 
 class ContentSender {
   ClientsHandlerSocket &sock;
-  clients_pool::ClientsPool &pool;
+  pool::ClientsPool &pool;
 
   void send_single(const types::addr_t &addr, const srp::Message &msg) const {
     sock.send_msg({msg.encode(), addr});
@@ -15,7 +15,7 @@ class ContentSender {
  public:
   ContentSender() = delete;
 
-  ContentSender(ClientsHandlerSocket &sock, clients_pool::ClientsPool &pool) : sock(sock), pool(pool) {}
+  ContentSender(ClientsHandlerSocket &sock, pool::ClientsPool &pool) : sock(sock), pool(pool) {}
 
   void send_to_clients(const srp::Message &msg) const {
     auto sendable_clients = pool.sendable_clients();

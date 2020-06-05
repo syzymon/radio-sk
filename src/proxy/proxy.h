@@ -11,7 +11,7 @@
 class UDPProxy : public proxy::RadioProxy {
  private:
   ClientsHandlerSocket socket_;
-  clients_pool::ClientsPool pool_;
+  pool::ClientsPool pool_;
   ContentSender sender_;
   ProxyServer server_;
   ContentDispatcher dispatcher_;

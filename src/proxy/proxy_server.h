@@ -7,12 +7,12 @@
 
 class ProxyServer {
   ClientsHandlerSocket &sock;
-  clients_pool::ClientsPool &pool;
+  pool::ClientsPool &pool;
 
  public:
   ProxyServer() = delete;
 
-  explicit ProxyServer(ClientsHandlerSocket &sock, clients_pool::ClientsPool &pool) :
+  explicit ProxyServer(ClientsHandlerSocket &sock, pool::ClientsPool &pool) :
       sock(sock), pool(pool) {}
 
   [[noreturn]] void operator()() {
