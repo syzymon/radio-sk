@@ -24,7 +24,7 @@ class Message {
  public:
   Message() = delete;
 
-  Message(IntegerField type, types::buffer_t body = "") : type_(type), body_(std::move(body)) {}
+  explicit Message(IntegerField type, types::buffer_t body = "") : type_(type), body_(std::move(body)) {}
 
   [[nodiscard]] IntegerField type() const { return type_; }
 
@@ -41,12 +41,12 @@ class Message {
     return ss.str();
   }
 
-  static const Message decode(const types::buffer_t &msg_str) {
+  static Message decode(const types::buffer_t &msg_str) {
     assert(msg_str.length() <= MAX_MSG_LEN + 4);
     std::istringstream ss(msg_str);
     uint16_t type, len;
-    ss.read(reinterpret_cast<char*>(&type), 2);
-    ss.read(reinterpret_cast<char*>(&len), 2);
+    ss.read(reinterpret_cast<char *>(&type), 2);
+    ss.read(reinterpret_cast<char *>(&len), 2);
 
     std::ostringstream rest;
     rest << ss.rdbuf();
