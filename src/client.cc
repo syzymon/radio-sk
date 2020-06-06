@@ -2,6 +2,7 @@
 #include <boost/program_options.hpp>
 
 #include "client/main.h"
+#include "client/io.h"
 
 namespace po = boost::program_options;
 /*
@@ -37,9 +38,9 @@ int main(int argc, char *argv[]) {
 
   auto proxy_host = var_map["-H"].as<std::string>();
   auto proxy_port = var_map["-P"].as<uint16_t>();
-  auto client_port = var_map["-P"].as<uint16_t>();
+  auto client_port = var_map["-p"].as<uint16_t>();
   auto secs_timeout = var_map["-T"].as<size_t>();
 
-  static auto main = client::Main(proxy_host, proxy_port, client_port, secs_timeout);
+  auto main = client::Main(proxy_host, proxy_port, client_port, secs_timeout);
   main.main();
 }
