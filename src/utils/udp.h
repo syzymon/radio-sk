@@ -49,7 +49,6 @@ class UDPClient : public network::AbstractSocketWrapper {
                            0, reinterpret_cast<sockaddr *>(&client_address),
                            &rcva_len);
     if (len < 0)
-      // TODO: safe throw here? refactor
       safe_throw();
     return {std::string(buffer, buffer + len), {client_address, rcva_len}};
   }
@@ -57,7 +56,6 @@ class UDPClient : public network::AbstractSocketWrapper {
   void send_msg(const types::NetworkMessage &msg) const {
     if (sendto(sock, msg.first.c_str(), msg.first.length(), 0,
                reinterpret_cast<const sockaddr *>(&msg.second.first), msg.second.second) < 0)
-      // TODO: refactor exception handling?
       safe_throw();
   }
 

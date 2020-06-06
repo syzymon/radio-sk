@@ -35,11 +35,10 @@ class ProxyServer {
         }
           break;
         case srp::KEEPALIVE: {
-          // TODO: update last date in the pool
           pool.update_client_time(incoming_msg.second);
         }
           break;
-        default: break; // TODO: handle not recognized messages?
+        default: break;
       }
     }
   }
