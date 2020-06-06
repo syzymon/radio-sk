@@ -24,7 +24,6 @@ class StdoutMetadataProxy : public RadioProxy {
   }
 
   void output_meta(const types::buffer_t &meta) override {
-    std::cerr << "META\n";
     state_.set_current_song(parse_metadata(meta));
   }
 };

@@ -75,7 +75,6 @@ class TCPServer : public network::AbstractSocketWrapper {
   static constexpr size_t QUEUE_LEN = 5;
 
   static int initialize_socket(uint16_t port) {
-    std::cerr << "Starting!\n";
     int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
       throw exceptions::SocketException(errno);
@@ -91,7 +90,6 @@ class TCPServer : public network::AbstractSocketWrapper {
       close(sock);
       throw exceptions::SocketException(errno);
     }
-    std::cerr << "Socket created!\n";
     return sock;
   }
 
@@ -108,7 +106,6 @@ class TCPServer : public network::AbstractSocketWrapper {
     int msg_sock = accept(sock, reinterpret_cast<sockaddr *>(&client_address), &client_address_len);
     if (msg_sock < 0)
       safe_throw();
-    std::cerr << "Received connection\n";
     return msg_sock;
   }
 };
