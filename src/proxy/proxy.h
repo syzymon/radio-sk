@@ -17,13 +17,18 @@ class UDPProxy : public proxy::RadioProxy {
   ContentDispatcher dispatcher_;
   std::thread proxy_srv_worker_;
 
+  const std::string &stream_name_;
+
  public:
   UDPProxy() = delete;
 
   explicit UDPProxy(uint16_t server_port,
-                    const std::optional<std::string> &multi, types::seconds_t secs_timeout)
+                    const std::optional<std::string> &multi,
+                    types::seconds_t secs_timeout,
+                    const std::string &stream_name)
       : socket_(server_port, multi), pool_(secs_timeout), sender_(socket_, pool_),
-        server_(socket_, pool_), dispatcher_(sender_), proxy_srv_worker_(std::ref(server_)) {
+        server_(socket_, pool_, stream_name), dispatcher_(sender_), proxy_srv_worker_(std::ref(server_)),
+        stream_name_(stream_name) {
     proxy_srv_worker_.detach();
   }
 

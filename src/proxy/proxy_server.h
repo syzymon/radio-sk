@@ -8,12 +8,13 @@
 class ProxyServer {
   ClientsHandlerSocket &sock;
   pool::ClientsPool &pool;
+  const std::string &current_stream_name;
 
  public:
   ProxyServer() = delete;
 
-  explicit ProxyServer(ClientsHandlerSocket &sock, pool::ClientsPool &pool) :
-      sock(sock), pool(pool) {}
+  explicit ProxyServer(ClientsHandlerSocket &sock, pool::ClientsPool &pool, const std::string &current_stream_name) :
+      sock(sock), pool(pool), current_stream_name(current_stream_name) {}
 
   [[noreturn]] void operator()() {
     while (true) {
@@ -21,7 +22,7 @@ class ProxyServer {
       auto request = srp::Message::decode(incoming_msg.first);
       switch (request.type()) {
         case srp::DISCOVER: {
-          auto response = srp::Message(srp::IAM, "TODO");
+          auto response = srp::Message(srp::IAM, current_stream_name);
           // Respond to the client with IAM.
           sock.send_msg({response.encode(), incoming_msg.second});
           // TODO: start sending only after first discover to unit address?

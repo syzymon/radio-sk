@@ -29,6 +29,7 @@ class Receiver : public AbstractReceiver {
   const std::string &port;
   const std::string &resource;
   const bool meta;
+  std::string &current_stream_name;
 
   void send_req() {
     tcp_stream << "GET " + resource + " HTTP/1.1" << CRLF;
@@ -91,15 +92,22 @@ class Receiver : public AbstractReceiver {
  public:
   Receiver() = delete;
 
-  Receiver(const types::Listener &on_audio, const types::Listener &on_metadata,
-           const std::string &addr, const std::string &port, const std::string &resource,
-           bool want_metadata, types::seconds_t timeout) :
+  Receiver(const types::Listener &on_audio,
+           const types::Listener &on_metadata,
+           const std::string &addr,
+           const std::string &port,
+           const std::string &resource,
+           bool want_metadata,
+           types::seconds_t timeout,
+           std::string &current_stream_name) :
       super(on_audio, on_metadata), client_(addr, port, timeout), tcp_stream(client_.get_stream()),
-      addr(addr), port(port), resource(resource), meta(want_metadata) {}
+      addr(addr), port(port), resource(resource), meta(want_metadata), current_stream_name(current_stream_name) {}
 
   [[noreturn]] void operator()() override {
     send_req();
     Headers h = parse_headers(tcp_stream);
+    if (h.find("icy-name") != h.end())
+      current_stream_name = h["icy-name"];
 
     try {
       size_t metaint = std::strtoul(h.at("icy-metaint").c_str(), nullptr, 0);
