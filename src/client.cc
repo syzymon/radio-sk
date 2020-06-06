@@ -41,6 +41,6 @@ int main(int argc, char *argv[]) {
   auto client_port = var_map["-p"].as<uint16_t>();
   auto secs_timeout = var_map["-T"].as<size_t>();
 
-  auto main = client::Main(proxy_host, proxy_port, client_port, secs_timeout);
+  static auto main = client::Main(proxy_host, proxy_port, client_port, secs_timeout);
   main.main();
 }
