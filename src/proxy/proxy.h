@@ -17,7 +17,7 @@ class UDPProxy : public proxy::RadioProxy {
   ContentDispatcher dispatcher_;
   std::thread proxy_srv_worker_;
   types::buffer_t last_metadata_;
-  [[maybe_unused]] const std::string &stream_name_;
+  const std::string &stream_name_;
 
  public:
   UDPProxy() = delete;
