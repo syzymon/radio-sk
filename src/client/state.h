@@ -35,6 +35,7 @@ class State {
     types::lock_t lock(mtx_);
     last_proxy_message = std::chrono::steady_clock::now();
     current_proxy = addr;
+    current_song = std::nullopt;
   }
 
   void set_last_msg_time() { // Unlocked since only UDP thread can read/modify it.
