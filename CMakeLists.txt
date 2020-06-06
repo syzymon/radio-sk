@@ -36,4 +36,4 @@ add_executable(radio-client
         src/client/io.h
         src/client/proxies_handler_socket.h src/client/srp_receiver.h src/client/main.h
         src/client.cc
-        src/utils/addr.h src/client/telnet_controller.h src/client/sender.h src/client/state.h)
+        src/utils/addr.h src/client/telnet_controller.h src/client/sender.h src/client/state.h src/client/proxies_pool.h src/client/menu.h src/client/stdout_metadata_proxy.h)
