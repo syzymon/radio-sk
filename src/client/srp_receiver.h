@@ -12,7 +12,6 @@
 namespace srp {
 class Receiver : public AbstractReceiver {
   ProxiesHandlerSocket &client_;
-  const types::addr_t &proxy_addr_;
   State &state_;
 
   void dispatch_msg(const srp::Message &msg) {
@@ -30,24 +29,19 @@ class Receiver : public AbstractReceiver {
       auto req = srp::Message::decode(incoming_msg.first);
       auto current_client_addr = state_.get_current_client_addr();
 
-//      std::cerr << "MSG: " << req.type() << "PROXY: " << (current_client_addr != std::nullopt) << '\n';
-
       if (req.type() == srp::IAM) {
         state_.add_proxy(incoming_msg.second, req.body());
       } else if (current_client_addr && addr::addr_equal(incoming_msg.second, *current_client_addr)) {
         state_.set_last_msg_time();
         dispatch_msg(req);
       }
-      // TODO: do not send keepalive in this thread
-//      auto resp = srp::Message(srp::KEEPALIVE);
-//      client_.send_msg({resp.encode(), proxy_addr_});
     }
   }
 
  public:
   Receiver(proxy::StdoutMetadataProxy &proxy, State &state,
-           ProxiesHandlerSocket &client, const types::addr_t &proxy_addr) :
-      AbstractReceiver(proxy), client_(client), proxy_addr_(proxy_addr), state_(state) {}
+           ProxiesHandlerSocket &client) :
+      AbstractReceiver(proxy), client_(client), state_(state) {}
 
   [[noreturn]] void operator()() override {
     listen();

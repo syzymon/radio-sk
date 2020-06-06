@@ -29,7 +29,7 @@ class Main {
       state_(timeout),
       proxy_(state_),
       proxy_addr_(addr::ip_port_to_addr(proxy_port, proxy_host)),
-      recv_(proxy_, state_, sock_, proxy_addr_),
+      recv_(proxy_, state_, sock_),
       discover_sender_(sock_, proxy_addr_),
       keepalive_sender_(sock_, state_),
       telnet_controller_(telnet_port, state_, discover_sender_),
