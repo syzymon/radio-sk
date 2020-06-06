@@ -34,7 +34,7 @@ class Main {
       proxy_(std::make_unique<UDPProxy>(udp_port, multicast_addr, client_timeout, stream_name_)),
       recv_(proxy_->on_audio(), proxy_->on_metadata(), host, port, resource, want_meta, timeout, stream_name_) {}
 
-  [[noreturn]] void main() {
+  void main() {
     recv_();
   }
 };

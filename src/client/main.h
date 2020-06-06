@@ -36,7 +36,7 @@ class Main {
       controller_worker_(std::ref(telnet_controller_)),
       keepalive_worker_(std::ref(keepalive_sender_)) {}
 
-  [[noreturn]] void main() {
+  void main() {
     controller_worker_.detach();
     keepalive_worker_.detach();
     recv_();
