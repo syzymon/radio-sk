@@ -9,12 +9,14 @@ class ProxyServer {
   ClientsHandlerSocket &sock;
   pool::ClientsPool &pool;
   const std::string &current_stream_name;
+  const std::string &last_metadata;
 
  public:
   ProxyServer() = delete;
 
-  explicit ProxyServer(ClientsHandlerSocket &sock, pool::ClientsPool &pool, const std::string &current_stream_name) :
-      sock(sock), pool(pool), current_stream_name(current_stream_name) {}
+  explicit ProxyServer(ClientsHandlerSocket &sock, pool::ClientsPool &pool, const std::string &current_stream_name,
+                       const std::string &last_metadata) :
+      sock(sock), pool(pool), current_stream_name(current_stream_name), last_metadata(last_metadata) {}
 
   [[noreturn]] void operator()() {
     while (true) {
@@ -27,6 +29,10 @@ class ProxyServer {
           sock.send_msg({response.encode(), incoming_msg.second});
           // TODO: start sending only after first discover to unit address?
           pool.add_client(incoming_msg.second);
+          if (!last_metadata.empty()) {
+            auto meta_response = srp::Message(srp::METADATA, last_metadata);
+            sock.send_msg({response.encode(), incoming_msg.second});
+          }
         }
           break;
         case srp::KEEPALIVE: {

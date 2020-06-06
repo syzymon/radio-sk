@@ -16,8 +16,8 @@ class UDPProxy : public proxy::RadioProxy {
   ProxyServer server_;
   ContentDispatcher dispatcher_;
   std::thread proxy_srv_worker_;
-
-  const std::string &stream_name_;
+  types::buffer_t last_metadata_;
+  [[maybe_unused]] const std::string &stream_name_;
 
  public:
   UDPProxy() = delete;
@@ -26,8 +26,12 @@ class UDPProxy : public proxy::RadioProxy {
                     const std::optional<std::string> &multi,
                     types::seconds_t secs_timeout,
                     const std::string &stream_name)
-      : socket_(server_port, multi), pool_(secs_timeout), sender_(socket_, pool_),
-        server_(socket_, pool_, stream_name), dispatcher_(sender_), proxy_srv_worker_(std::ref(server_)),
+      : socket_(server_port, multi),
+        pool_(secs_timeout),
+        sender_(socket_, pool_),
+        server_(socket_, pool_, stream_name, last_metadata_),
+        dispatcher_(sender_),
+        proxy_srv_worker_(std::ref(server_)),
         stream_name_(stream_name) {
     proxy_srv_worker_.detach();
   }
@@ -37,6 +41,7 @@ class UDPProxy : public proxy::RadioProxy {
   }
 
   void output_meta(const types::buffer_t &meta) override {
+    last_metadata_ = meta;
     dispatcher_.send_metadata(meta);
   }
 };
