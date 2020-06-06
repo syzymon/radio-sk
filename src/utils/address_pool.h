@@ -22,7 +22,6 @@ static types::addr_t encode_addr(const UniqueAddressKey &key) {
   };
 
   socklen_t len = sizeof addr;
-  // TODO: test this encoding
   return {addr, len};
 }
 

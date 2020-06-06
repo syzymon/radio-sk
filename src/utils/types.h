@@ -13,7 +13,7 @@ using buffer_t = std::string;
 using seconds_t = size_t;
 using addr_t = std::pair<sockaddr_in, socklen_t>;
 using NetworkMessage = std::pair<buffer_t, addr_t>;
-using Listener = std::function<void(const std::string&)>;
+using Listener = std::function<void(const std::string &)>;
 using time_point_t = std::chrono::steady_clock::time_point;
 using lock_t = std::unique_lock<std::mutex>;
 }

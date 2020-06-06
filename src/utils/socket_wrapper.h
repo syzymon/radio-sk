@@ -25,8 +25,6 @@ class AbstractSocketWrapper {
   explicit AbstractSocketWrapper(int sock) : sock(sock) {}
  public:
   virtual ~AbstractSocketWrapper() {
-    // TODO: remove
-    std::cerr << "CLOSE";
     if (sock >= 0) close(sock);
   }
 };

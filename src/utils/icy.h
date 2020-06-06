@@ -22,7 +22,6 @@ class Receiver : public AbstractReceiver {
   static constexpr size_t META_LEN_MULTIPLIER = 16;
   char buffer[BUF_SIZE]{};
   tcp::TCPClient client_;
-  // TODO: fix problem with single \n inside headers
   std::iostream &tcp_stream;
 
   const std::string &addr;

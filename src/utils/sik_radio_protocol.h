@@ -4,7 +4,6 @@
 #include <utility>
 #include <cstdint>
 #include <sstream>
-#include <cassert>
 
 #include "types.h"
 
@@ -31,7 +30,6 @@ class Message {
   [[nodiscard]] types::buffer_t body() const { return body_; }
 
   [[nodiscard]] types::buffer_t encode() const {
-    assert(body_.length() <= MAX_MSG_LEN);
     std::ostringstream ss;
     uint16_t converted_type = htons(type_);
     uint16_t converted_len = htons(body_.length());
@@ -42,7 +40,6 @@ class Message {
   }
 
   static Message decode(const types::buffer_t &msg_str) {
-    assert(msg_str.length() <= MAX_MSG_LEN + 4);
     std::istringstream ss(msg_str);
     uint16_t type, len;
     ss.read(reinterpret_cast<char *>(&type), 2);
@@ -51,7 +48,6 @@ class Message {
     std::ostringstream rest;
     rest << ss.rdbuf();
     std::string body = rest.str();
-    assert(ntohs(len) == body.length());
     return Message(ntohs(type), body);
   }
 };
