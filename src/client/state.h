@@ -22,7 +22,8 @@ class State {
     types::lock_t lock(mtx_);
     types::time_point_t now = std::chrono::steady_clock::now();
     if (current_proxy
-        && std::chrono::duration_cast<std::chrono::seconds>(now - last_proxy_message).count() >= proxy_timeout) {
+        && std::chrono::duration_cast<std::chrono::seconds>(now - last_proxy_message).count() >=
+            static_cast<int64_t>(proxy_timeout)) {
       available_proxies.del(*current_proxy);
       current_proxy = std::nullopt;
     }
