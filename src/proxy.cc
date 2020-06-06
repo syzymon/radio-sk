@@ -53,8 +53,13 @@ int main(int argc, char *argv[]) {
   auto multicast_addr = pseudo_opt_to_std_opt(var_map["-B"].as<std::string>(), std::string("none"));
   size_t client_timeout = var_map["-T"].as<size_t>();
 
-  static auto main =
-      udp_port ? proxy::Main(host, resource, port, want_meta, timeout, *udp_port, multicast_addr, client_timeout)
-               : proxy::Main(host, resource, port, want_meta, timeout);
-  main.main();
+  try {
+    static auto main =
+        udp_port ? proxy::Main(host, resource, port, want_meta, timeout, *udp_port, multicast_addr, client_timeout)
+                 : proxy::Main(host, resource, port, want_meta, timeout);
+    main.main();
+  } catch (const exceptions::RadioException &err) {
+    std::cerr << err.what() << '\n';
+    exit(1);
+  }
 }

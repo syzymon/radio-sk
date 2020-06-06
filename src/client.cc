@@ -41,6 +41,11 @@ int main(int argc, char *argv[]) {
   auto client_port = var_map["-p"].as<uint16_t>();
   auto secs_timeout = var_map["-T"].as<size_t>();
 
-  static auto main = client::Main(proxy_host, proxy_port, client_port, secs_timeout);
-  main.main();
+  try {
+    static auto main = client::Main(proxy_host, proxy_port, client_port, secs_timeout);
+    main.main();
+  } catch (exceptions::RadioException &err) {
+    std::cerr << err.what() << '\n';
+    exit(1);
+  }
 }

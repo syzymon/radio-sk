@@ -45,6 +45,12 @@ class AddressException : public RadioException {
   explicit AddressException(const std::string &msg) :
       RadioException("Invalid address: " + msg) {}
 };
+
+class TimeoutException : public RadioException {
+ public:
+  explicit TimeoutException(const std::string &msg) :
+      RadioException("Timeout: " + msg) {}
+};
 }
 
 #endif //RADIO_SK_SRC_UTILS_EXCEPTIONS_H_

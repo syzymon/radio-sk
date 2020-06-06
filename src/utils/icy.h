@@ -53,6 +53,9 @@ class Receiver : public AbstractReceiver {
     Headers res;
     std::string response_ln;
     std::getline(response, response_ln);
+    if (response_ln.empty()) // Bad (or no) response
+      throw exceptions::TimeoutException("failed to read headers");
+
     response_ln.pop_back();
 
     std::istringstream iss(response_ln);
@@ -72,10 +75,14 @@ class Receiver : public AbstractReceiver {
   [[noreturn]] void read_audio_metadata_(std::istream &response, size_t metaint) {
     while (true) {
       response.read(buffer, metaint);
+      if (response.eof())
+        throw exceptions::TimeoutException("read audio");
       on_audio(std::string(buffer, buffer + metaint));
       size_t meta_len = response.get() * META_LEN_MULTIPLIER;
       if (meta_len > 0) {
         response.read(buffer, meta_len);
+        if (response.eof())
+          throw exceptions::TimeoutException("read metadata");
         on_metadata(std::string(buffer, buffer + meta_len));
       }
     }
@@ -84,6 +91,8 @@ class Receiver : public AbstractReceiver {
   [[noreturn]] void read_audio_only_(std::istream &response) {
     while (true) {
       response.read(buffer, CHUNK_SIZE);
+      if (response.eof())
+        throw exceptions::TimeoutException("read audio");
       on_audio(std::string(buffer, buffer + CHUNK_SIZE));
     }
   }
