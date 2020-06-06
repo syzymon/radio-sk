@@ -8,8 +8,7 @@
 #include "utils/address_pool.h"
 
 namespace pool {
-using time_t = std::chrono::steady_clock::time_point;
-using ClientData = time_t;
+using ClientData = types::time_point_t;
 using ClientEntry = std::pair<UniqueAddressKey, ClientData>;
 
 class ClientsPool : public pool::SynchronizedAddressPool<ClientData> {
@@ -20,7 +19,7 @@ class ClientsPool : public pool::SynchronizedAddressPool<ClientData> {
   }
 
   bool client_sendable(const ClientEntry &client) const {
-    time_t now = std::chrono::steady_clock::now();
+    types::time_point_t now = std::chrono::steady_clock::now();
     types::seconds_t diff = std::chrono::duration_cast<std::chrono::seconds>(now - client.second).count();
     return diff < timeout_;
   }
