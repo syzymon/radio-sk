@@ -26,6 +26,7 @@ class State {
             static_cast<int64_t>(proxy_timeout)) {
       available_proxies.del(*current_proxy);
       current_proxy = std::nullopt;
+      current_song = std::nullopt;
     }
     return current_proxy;
   }
