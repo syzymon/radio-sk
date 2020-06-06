@@ -15,7 +15,7 @@ static constexpr size_t BUF_SIZE = 65536;
 
 class ClientsHandlerSocket : public udp::UDPClient<BUF_SIZE> {
   using super = udp::UDPClient<BUF_SIZE>;
-  [[maybe_unused]] sockaddr_in local_address{};
+  sockaddr_in local_address{};
 
   void init_mcast(const std::string &multi) {
     int optval = 1;
@@ -45,7 +45,7 @@ class ClientsHandlerSocket : public udp::UDPClient<BUF_SIZE> {
   ClientsHandlerSocket() = delete;
 
   explicit ClientsHandlerSocket(uint16_t server_port,
-                       const std::optional<std::string> &multi = std::nullopt) :
+                                const std::optional<std::string> &multi = std::nullopt) :
       super() {
     set_socket_options(multi);
     local_address = bind_socket(sock, server_port);

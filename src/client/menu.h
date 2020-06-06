@@ -74,7 +74,7 @@ class Menu {
     }
 
     void on_click() override {
-      static const auto addr_encoded = pool::encode_addr(addr_);
+      auto addr_encoded = pool::encode_addr(addr_);
       menu_.state_.set_current_proxy_addr(addr_encoded);
       menu_.send_.discover_single(addr_encoded);
       menu_.current_proxy_name_ = metadata_;
