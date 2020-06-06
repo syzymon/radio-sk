@@ -30,12 +30,11 @@ class Menu {
     }
 
     void on_click() override {
-      std::cerr << "DISCOVER\n";
       send_.discover_all();
     }
 
     [[nodiscard]] std::string caption() const override {
-      static std::string text = "Szukaj posrednika";
+      static const std::string text = "Szukaj posrednika";
       return text;
     }
   };
@@ -53,18 +52,15 @@ class Menu {
     }
 
     [[nodiscard]] std::string caption() const override {
-      static std::string text = "Koniec";
+      static const std::string text = "Koniec";
       return text;
     }
   };
 
   class ProxyItem : public MenuItem {
     Menu &menu_;
-//    State &state_;
     std::string metadata_;
     const pool::UniqueAddressKey addr_;
-//    const sender::DiscoverSender &send_;
-
 
    public:
     ProxyItem(std::string meta, pool::UniqueAddressKey key, Menu &menu)
@@ -178,16 +174,24 @@ class Menu {
 
   std::vector<std::string> render_lines() {
     update_proxies();
+    if (current_proxy_name_ && !state_.get_current_client_addr()) {
+      current_proxy_name_ = std::nullopt;
+      currently_selected_ = &search_;
+    }
+
     std::vector<std::string> res;
     res.push_back(caption_with_selected(&search_));
     for (auto &proxy_item : proxies_)
       res.push_back(caption_with_selected(&proxy_item));
     res.push_back(caption_with_selected(&end_));
+    // Separator
+    res.emplace_back();
     auto current_song = state_.get_current_song();
-    if (current_proxy_name_)
+    if (current_proxy_name_) {
       res.push_back("Sluchasz: " + *current_proxy_name_);
-    if (current_song)
-      res.push_back("Aktualny song: " + *current_song);
+      if (current_song)
+        res.push_back(*current_song);
+    }
     return res;
   }
 };
