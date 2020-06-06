@@ -1,7 +1,7 @@
 #ifndef RADIO_SK_SRC_PROXY_PROXY_SERVER_H_
 #define RADIO_SK_SRC_PROXY_PROXY_SERVER_H_
 
-#include "utils/sik_radio_protocol.h"
+#include "../utils/sik_radio_protocol.h"
 #include "clients_handler_socket.h"
 #include "clients_pool.h"
 

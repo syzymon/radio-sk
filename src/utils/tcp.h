@@ -10,7 +10,7 @@
 
 #include "types.h"
 #include "socket_wrapper.h"
-#include "utils/exceptions.h"
+#include "exceptions.h"
 #include "addr.h"
 
 namespace tcp {

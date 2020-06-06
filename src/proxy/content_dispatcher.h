@@ -1,7 +1,7 @@
 #ifndef RADIO_SK_SRC_PROXY_CONTENT_DISPATCHER_H_
 #define RADIO_SK_SRC_PROXY_CONTENT_DISPATCHER_H_
 
-#include "utils/sik_radio_protocol.h"
+#include "../utils/sik_radio_protocol.h"
 #include "audio_sender.h"
 
 class ContentDispatcher {

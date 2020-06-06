@@ -2,11 +2,11 @@
 #define RADIO_SK_SRC_PROXY_PROXY_H_
 
 #include <thread>
-#include "utils/types.h"
+#include "../utils/types.h"
 #include "content_dispatcher.h"
 #include "proxy_server.h"
 #include "audio_sender.h"
-#include "utils/proxy.h"
+#include "../utils/proxy.h"
 
 class UDPProxy : public proxy::RadioProxy {
  private:
