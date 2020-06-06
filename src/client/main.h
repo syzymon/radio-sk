@@ -20,6 +20,7 @@ class Main {
   sender::KeepaliveSender keepalive_sender_;
   telnet::Controller telnet_controller_;
   std::thread controller_worker_;
+  std::thread keepalive_worker_;
 
  public:
   Main() = delete;
@@ -32,10 +33,12 @@ class Main {
       discover_sender_(sock_, proxy_addr_),
       keepalive_sender_(sock_, state_),
       telnet_controller_(telnet_port, state_, discover_sender_),
-      controller_worker_(std::ref(telnet_controller_)) {}
+      controller_worker_(std::ref(telnet_controller_)),
+      keepalive_worker_(std::ref(keepalive_sender_)) {}
 
   [[noreturn]] void main() {
     controller_worker_.detach();
+    keepalive_worker_.detach();
     recv_();
   }
 };

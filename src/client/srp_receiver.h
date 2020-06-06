@@ -39,8 +39,8 @@ class Receiver : public AbstractReceiver {
         dispatch_msg(req);
       }
       // TODO: do not send keepalive in this thread
-      auto resp = srp::Message(srp::KEEPALIVE);
-      client_.send_msg({resp.encode(), proxy_addr_});
+//      auto resp = srp::Message(srp::KEEPALIVE);
+//      client_.send_msg({resp.encode(), proxy_addr_});
     }
   }
 
