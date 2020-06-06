@@ -10,7 +10,7 @@
 
 #include "types.h"
 #include "socket_wrapper.h"
-#include "exceptions.h"
+#include "../utils/exceptions.h"
 #include "addr.h"
 
 namespace tcp {
@@ -89,10 +89,6 @@ class TCPServer : public network::AbstractSocketWrapper {
 
     if (listen(sock, QUEUE_LEN) < 0) {
       close(sock);
-      throw exceptions::SocketException(errno);
-    }
-
-    if (listen(sock, QUEUE_LEN) < 0) {
       throw exceptions::SocketException(errno);
     }
     std::cerr << "Socket created!\n";
